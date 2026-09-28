@@ -1,0 +1,117 @@
+spring:
+  application:
+    name: backend
+
+
+  main:
+    allow-bean-definition-overriding: true
+
+
+  #datasource:
+    #url: jdbc:h2:mem:billing_incidents_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+   # driver-class-name: org.h2.Driver
+   # username: sa
+   # password:
+
+  #jpa:
+   # hibernate:
+   #   ddl-auto: update
+   # show-sql: true
+   # properties:
+    #  hibernate:
+     #   dialect: org.hibernate.dialect.H2Dialect
+      #  format_sql: true
+       # use_sql_comments: true
+
+ # h2:
+  #  console:
+   #   enabled: true
+    #  path: /h2-console
+
+
+  datasource:
+   url: jdbc:mysql://localhost:3306/billing_incidents_dev?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+   username: root
+   password:
+   driver-class-name: com.mysql.cj.jdbc.Driver
+   hikari:
+     maximum-pool-size: 5
+     minimum-idle: 2
+     connection-timeout: 20000
+     idle-timeout: 300000
+     max-lifetime: 1200000
+
+  jpa:
+   hibernate:
+    ddl-auto: update
+   show-sql: true
+   properties:
+    hibernate:
+     dialect: org.hibernate.dialect.MySQL8Dialect
+    format_sql: true
+    use_sql_comments: true
+    generate_statistics: true
+
+  sql:
+    init:
+      mode: never
+      data-locations: classpath:data.sql
+    jpa:
+      defer-datasource-initialization: true
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+
+  data:
+    elasticsearch:
+      client:
+        elasticsearch-rest:
+          uris: https://localhost:9200
+      username: elastic
+      password: "AMSo_XrUnTqdK6b-jaRU"
+      socket-timeout: 10s
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:mySecretKeyForBillingIncidentReportingApplicationVeryLongAndSecure2025}
+  expiration: 86400000 # 24 heures
+
+# Application Configuration
+app:
+  upload:
+    dir: ${UPLOAD_DIR:./uploads}
+  rollback:
+    watch-dir: ${ROLLBACK_DIR:./rollback-files}
+
+# Server Configuration
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.billing.incident: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+  file:
+    name: logs/application.log
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always

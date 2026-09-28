@@ -1,0 +1,115 @@
+# ==================== application-prod.yml ====================
+# Fichier: src/main/resources/application-prod.yml
+
+spring:
+  application:
+    name: billing-incident-reporting
+
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      leak-detection-threshold: 60000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate # Ne pas modifier le schéma en production
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: false
+        use_sql_comments: false
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+      file-size-threshold: 2MB
+
+  elasticsearch:
+    uris: ${ELASTICSEARCH_URL}
+    username: ${ELASTIC_USERNAME}
+    password: ${ELASTIC_PASSWORD}
+    connection-timeout: 10s
+    socket-timeout: 60s
+
+# JWT Configuration - Utiliser variables d'environnement en production
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+# Application Configuration
+app:
+  upload:
+    dir: ${UPLOAD_DIR}
+  rollback:
+    watch-dir: ${ROLLBACK_DIR}
+
+# Server Configuration
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json
+    min-response-size: 1024
+  http2:
+    enabled: true
+
+# Logging Configuration - Mode production
+logging:
+  level:
+    root: WARN
+    com.billing.incident: INFO
+    org.springframework.security: WARN
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: /app/logs/application.log
+    max-size: 50MB
+    max-history: 30
+    total-size-cap: 1GB
+
+# Actuator Configuration - Endpoints limités en production
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+    shutdown:
+      enabled: false
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# Security headers
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        secure: true
+        same-site: strict

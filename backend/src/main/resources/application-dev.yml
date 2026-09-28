@@ -1,0 +1,109 @@
+#==================== application-dev.yml ====================
+# Fichier: src/main/resources/application-dev.yml
+
+spring:
+  application:
+    name: billing-incident-reporting-dev
+
+  config:
+    import: optional:file:.env[.properties]
+
+
+
+  datasource:
+    url: ${DB_URL}
+    driver-class-name: org.h2.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+    jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.H2Dialect
+          format_sql: true
+          use_sql_comments: true
+
+    h2:
+      console:
+        enabled: true
+        path: /h2-console
+
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+      file-size-threshold: 2MB
+
+  elasticsearch:
+    uris: ${ELASTICSEARCH_URL}
+    username:
+    password:
+    connection-timeout: 5s
+    socket-timeout: 30s
+
+  # Profil développement - Logs détaillés
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 86400000 # 24 heures
+
+# Application Configuration
+app:
+  upload:
+    dir: ${UPLOAD_DIR}
+  rollback:
+    watch-dir: ${ROLLBACK_DIR}
+
+# Server Configuration
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on_param
+
+# Logging Configuration - Mode développement verbose
+logging:
+  level:
+    root: INFO
+    com.billing.incident: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.elasticsearch: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/application-dev.log
+    max-size: 10MB
+    max-history: 7
+
+# Actuator Configuration - Tous endpoints exposés en dev
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
