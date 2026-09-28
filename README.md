@@ -290,4 +290,4 @@ C’est un projet de qualité idéale pour illustrer un profil technique solide,
 
 Ce projet reflète une approche de développement orientée produit et qualité logicielle : il ne se contente pas de mettre en place des fonctionnalités, il s’assure également que le système est sûr, traçable, évolutif et bien structuré.
 
-Il constitue une base solide pour présenter un profil de développeur capable de prendre en charge des applications métier complètes, avec une attention particulière à la sécurité, à la fiabilité et à la maintenabilité.
+Il me permet de mettre en valeur mon profil en tant que développeur capable de prendre en charge des applications métier complètes, avec une attention particulière à la sécurité, à la fiabilité et à la maintenabilité.
