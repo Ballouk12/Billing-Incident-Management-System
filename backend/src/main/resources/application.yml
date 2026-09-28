@@ -7,32 +7,10 @@ spring:
     allow-bean-definition-overriding: true
 
 
-  #datasource:
-    #url: jdbc:h2:mem:billing_incidents_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-   # driver-class-name: org.h2.Driver
-   # username: sa
-   # password:
-
-  #jpa:
-   # hibernate:
-   #   ddl-auto: update
-   # show-sql: true
-   # properties:
-    #  hibernate:
-     #   dialect: org.hibernate.dialect.H2Dialect
-      #  format_sql: true
-       # use_sql_comments: true
-
- # h2:
-  #  console:
-   #   enabled: true
-    #  path: /h2-console
-
-
   datasource:
-   url: jdbc:mysql://localhost:3306/billing_incidents_dev?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
-   username: root
-   password:
+   url: ${DB_URL}
+   username: ${DB_USERNAME}
+   password: ${DB_PASSWORD}
    driver-class-name: com.mysql.cj.jdbc.Driver
    hikari:
      maximum-pool-size: 5
@@ -70,22 +48,22 @@ spring:
     elasticsearch:
       client:
         elasticsearch-rest:
-          uris: https://localhost:9200
-      username: elastic
-      password: "AMSo_XrUnTqdK6b-jaRU"
+          uris: ${ELASTICSEARCH_URL}
+      username: ${ELASTICSEARCH_USERNAME}
+      password: ${ELASTICSEARCH_PASSWORD}
       socket-timeout: 10s
 
 # JWT Configuration
 jwt:
-  secret: ${JWT_SECRET:mySecretKeyForBillingIncidentReportingApplicationVeryLongAndSecure2025}
+  secret: ${JWT_SECRET}
   expiration: 86400000 # 24 heures
 
 # Application Configuration
 app:
   upload:
-    dir: ${UPLOAD_DIR:./uploads}
+    dir: ${UPLOAD_DIR}
   rollback:
-    watch-dir: ${ROLLBACK_DIR:./rollback-files}
+    watch-dir: ${ROLLBACK_DIR}
 
 # Server Configuration
 server:
