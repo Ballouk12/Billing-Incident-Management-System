@@ -67,7 +67,7 @@ Le but est d’aller au-delà d’un simple CRUD : il s’agit d’une applicati
 - affectation à un technicien,
 - suivi du statut : en attente, en cours, résolu, etc.,
 - association de solutions à chaque incident,
-- historique de résolution et de traitement.
+- historique de résolution et de traitement..
 
 ### 2. Authentification et autorisation
 - connexion sécurisée avec JWT,
